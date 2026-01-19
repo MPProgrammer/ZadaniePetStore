@@ -50,15 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     // 'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(response => {
+            .then(async response => {
+                const data = await response.json();
+
                 if (!response.ok) {
-                    // throw data;
-                    // throw new Error('Server error');
-                    return response.json().then(err => {
-                        throw err;
-                    });
+                    throw data;
                 }
-                return response.json();
+
+                return data;
             })
             .then(data => {
                 // LIMIT danych po stronie frontu (performance)
