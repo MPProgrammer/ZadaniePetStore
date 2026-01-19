@@ -44,10 +44,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadPets() {
         renderLoading();
 
-        fetch(`/ajax/pets?status=${statusSelect.value}`)
+        fetch(`/ajax/pets?status=${statusSelect.value}`, {
+                headers: {
+                    'Accept': 'application/json',
+                    // 'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Server error');
+                    // throw data;
+                    // throw new Error('Server error');
+                    return response.json().then(err => {
+                        throw err;
+                    });
                 }
                 return response.json();
             })
@@ -55,9 +64,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 // LIMIT danych po stronie frontu (performance)
                 renderPets(data.slice(0, 50));
             })
-            .catch(() => {
-                renderError('Error loading pets');
+            // .catch(() => {
+            //     renderError('Error loading pets');
+            // });
+            .catch(err => {
+                // console.log(err);
+                // console.log(err.error);
+                if (err.errors && err.errors.status) {
+                    renderError(err.errors.status[0]);
+                } else {
+                    renderError('Unexpected error');
+                }
             });
+
+        // fetch(`/ajax/pets?status=${statusSelect.value}`, {
+        //     headers: {
+        //         'Accept': 'application/json'
+        //     }
+        // })
+        // .then(async response => {
+        //     const data = await response.json();
+
+        //     if (!response.ok) {
+        //         // TU rzucamy JSON, nie Error()
+        //         throw data;
+        //     }
+
+        //     return data;
+        // })
+        // .then(data => {
+        //     renderPets(data.slice(0, 50));
+        // })
+        // .catch(err => {
+        //     // console.log(err);
+
+        //     if (err.error) {
+        //         renderError(err.error);
+        //     } else {
+        //         renderError('Unexpected error');
+        //     }
+        // });
     }
 
     statusSelect.addEventListener('change', loadPets);

@@ -8,9 +8,11 @@
 
 <label for="status">Status:</label>
 <select id="status">
-    <option value="available">Available</option>
-    <option value="pending">Pending</option>
-    <option value="sold">Sold</option>
+    @foreach ($statuses as $value => $label)
+        <option value="{{ $value }}">{{ $label }}</option>
+    @endforeach
+
+    <!-- <option value="xxx">xxx</option> -->
 </select>
 
 <table border="1" cellpadding="5" id="pets-table">
