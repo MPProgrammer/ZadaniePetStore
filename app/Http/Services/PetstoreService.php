@@ -23,11 +23,49 @@ class PetstoreService
         ]);
     }
 
+    public function getPet($id)
+    {
+        return $this->client()->get("$this->baseUrl/pet/$id");
+    }
+
     public function findByStatus(string $status)
     {
         return $this->client()->get(
             $this->baseUrl . '/pet/findByStatus',
             ['status' => $status]
+        );
+    }
+
+    public function createPet(array $data)
+    {
+        return $this->client()->post(
+            $this->baseUrl . '/pet',
+            [
+                // 'id' => $data['id'],
+                'name' => $data['name'],
+                'status' => $data['status'],
+                'photoUrls' => [],
+            ]
+        );
+    }
+
+    public function updatePet(array $data)
+    {
+        return $this->client()->put(
+            $this->baseUrl . '/pet',
+            [
+                'id' => $data['id'],
+                'name' => $data['name'],
+                'status' => $data['status'],
+                'photoUrls' => [],
+            ]
+        );
+    }
+
+    public function deletePet(int $id)
+    {
+        return $this->client()->delete(
+            $this->baseUrl . '/pet/' . $id
         );
     }
 }

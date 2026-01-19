@@ -6,6 +6,17 @@
 
 <h2>Lista petów</h2>
 
+
+@if(session('success'))
+    <p style="color:green">{{ session('success') }}</p>
+@endif
+
+@if($errors->any())
+    <p style="color:red">{{ $errors->first() }}</p>
+@endif
+
+<a href="{{ route('pets.create') }}">Add pet</a>
+
 <label for="status">Status:</label>
 <select id="status">
     @foreach ($statuses as $value => $label)
