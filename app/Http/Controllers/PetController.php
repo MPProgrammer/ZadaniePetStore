@@ -43,7 +43,7 @@ class PetController extends Controller
 
         $cacheKey = 'pets_status_' . $status;
 
-        $pets = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($service, $status) {
+        $pets = Cache::remember($cacheKey, now()->addMinutes((int) config('pets.cache_duration_minutes')), function () use ($service, $status) {
             $response = $service->findByStatus($status);
 
             if ($response->failed()) {
