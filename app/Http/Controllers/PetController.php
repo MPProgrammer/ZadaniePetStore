@@ -84,6 +84,14 @@ class PetController extends Controller
             ], 500);
         }
 
+        // roblem z zaokragleniem dużych liczb w JS - ID jako string
+        $pets = array_map(function ($pet) {
+            if (isset($pet['id'])) {
+                $pet['id'] = (string) $pet['id'];
+            }
+            return $pet;
+        }, $pets);
+
         return response()->json($pets);
     }
 
@@ -97,7 +105,7 @@ class PetController extends Controller
 
         $response = $service->createPet($data);
 
-        var_dump($response->body()); exit;
+        // var_dump($response->body()); exit;
 
         if ($response->failed()) {
             return back()
@@ -107,8 +115,10 @@ class PetController extends Controller
 
         $this->clearPetsCache();
 
+        $id = $response->json()['id'];
+
         return redirect()
-            ->route('pets.edit', $data['id'])
+            ->route('pets.edit', $id)
             ->with('success', 'Pet created successfully');
     }
 
@@ -149,6 +159,24 @@ class PetController extends Controller
             ->route('pets.index')
             ->with('success', 'Pet deleted');
     }
+
+    public function destroyAjax(string $id, PetstoreService $service)
+    {
+        $response = $service->deletePet($id);
+
+        if ($response->failed()) {
+            return response()->json([
+                'error' => 'Unable to delete pet'
+            ], 500);
+        }
+
+        $this->clearPetsCache();
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
 
 
 

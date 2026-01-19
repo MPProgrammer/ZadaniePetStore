@@ -1,6 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const statusSelect = document.getElementById('status');
     const tableBody = document.querySelector('#pets-table tbody');
+    const messageBox = document.getElementById('message');
+
+    function showSuccess(msg) {
+        messageBox.innerHTML = `<p style="color:green">${msg}</p>`;
+    }
+
+    function showError(msg) {
+        messageBox.innerHTML = `<p style="color:red">${msg}</p>`;
+    }
 
     function renderLoading() {
         tableBody.innerHTML = `
@@ -41,6 +50,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function renderPets(pets) {
+        tableBody.innerHTML = '';
+
+        if (!pets.length) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="4">No pets found</td>
+                </tr>
+            `;
+            return;
+        }
+
+        pets.forEach(pet => {
+            tableBody.innerHTML += `
+                <tr data-id="${pet.id}">
+                    <td>${pet.id}</td>
+                    <td>${pet.name ?? '-'}</td>
+                    <td>${pet.status}</td>
+                    <td>
+                        <a href="/pets/${pet.id}/edit">Edit</a>
+                        |
+                        <button class="delete-btn" data-id="${pet.id}">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+
     function loadPets() {
         renderLoading();
 
@@ -61,7 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(data => {
                 // LIMIT danych po stronie frontu (performance)
-                renderPets(data.slice(0, 50));
+                // renderPets(data.slice(0, 50));
+                renderPets(data);
             })
             // .catch(() => {
             //     renderError('Error loading pets');
@@ -111,4 +152,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // pierwszy load
     loadPets();
+
+    tableBody.addEventListener('click', e => {
+        if (!e.target.classList.contains('delete-btn')) return;
+
+        const id = e.target.dataset.id;
+
+        if (!confirm(`Are you sure you want to delete pet #${id}?`)) {
+            return;
+        }
+
+        // apiFetch(`/pets/${id}/deleteajax`, {
+        //     method: 'POST'
+        // })
+        // .then(() => {
+        //     showSuccess('Pet deleted successfully');
+        //     loadPets(); // odśwież listę
+        // })
+        // .catch(err => {
+        //     showError(err.error || 'Delete failed');
+        // });
+
+        
+
+        // fetch(`/ajax/pets/${id}/delete`)
+        // .then(() => {
+        //     showSuccess('Pet deleted successfully');
+        //     loadPets(); // odśwież listę
+        // })
+        // .catch(err => {
+        //     showError(err.error || 'Delete failed');
+        // });
+
+        fetch(`/ajax/pets/${id}/delete`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute('content'),
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error();
+            return response.json();
+        })
+        .then(() => {
+            showSuccess('Pet deleted successfully');
+            loadPets();
+        })
+        .catch(() => {
+            showError('Delete failed');
+        });
+
+    });
+
 });
