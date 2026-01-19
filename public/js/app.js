@@ -71,6 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // console.log(err.error);
                 if (err.errors && err.errors.status) {
                     renderError(err.errors.status[0]);
+                }else if (err.error && typeof err.error === 'string') {
+                    renderError(err.error);
                 } else {
                     renderError('Unexpected error');
                 }

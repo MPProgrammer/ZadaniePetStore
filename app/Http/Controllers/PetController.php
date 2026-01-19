@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Services\PetstoreService;
 use Illuminate\Validation\Rule;
 // use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
 
 class PetController extends Controller
 {
@@ -40,14 +41,24 @@ class PetController extends Controller
 
         $status = $request->get('status', 'available');
 
-        $response = $service->findByStatus($status);
+        $cacheKey = 'pets_status_' . $status;
 
-        if ($response->failed()) {
+        $pets = Cache::remember($cacheKey, now()->addMinutes(5), function () use ($service, $status) {
+            $response = $service->findByStatus($status);
+
+            if ($response->failed()) {
+                return null;
+            }
+
+            return $response->json();
+        });
+
+        if ($pets === null) {
             return response()->json([
                 'error' => 'Petstore API error'
             ], 500);
         }
 
-        return response()->json($response->json());
+        return response()->json($pets);
     }
 }
