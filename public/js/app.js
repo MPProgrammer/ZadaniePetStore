@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderLoading() {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="3">Loading...</td>
+                <td colspan="4">Loading...</td>
             </tr>
         `;
     }
@@ -22,33 +22,33 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderError(message) {
         tableBody.innerHTML = `
             <tr>
-                <td colspan="3" style="color:red;">${message}</td>
+                <td colspan="4" style="color:red;">${message}</td>
             </tr>
         `;
     }
 
-    function renderPets(pets) {
-        tableBody.innerHTML = '';
+    // function renderPets(pets) {
+    //     tableBody.innerHTML = '';
 
-        if (!pets.length) {
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="3">No pets found</td>
-                </tr>
-            `;
-            return;
-        }
+    //     if (!pets.length) {
+    //         tableBody.innerHTML = `
+    //             <tr>
+    //                 <td colspan="4">No pets found</td>
+    //             </tr>
+    //         `;
+    //         return;
+    //     }
 
-        pets.forEach(pet => {
-            tableBody.innerHTML += `
-                <tr>
-                    <td>${pet.id}</td>
-                    <td>${pet.name ?? '-'}</td>
-                    <td>${pet.status}</td>
-                </tr>
-            `;
-        });
-    }
+    //     pets.forEach(pet => {
+    //         tableBody.innerHTML += `
+    //             <tr>
+    //                 <td>${pet.id}</td>
+    //                 <td>${pet.name ?? '-'}</td>
+    //                 <td>${pet.status}</td>
+    //             </tr>
+    //         `;
+    //     });
+    // }
 
     function renderPets(pets) {
         tableBody.innerHTML = '';

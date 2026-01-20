@@ -1,43 +1,45 @@
 @extends('layouts.app')
 
-@section('title', 'Lista petów')
+@section('title', 'Lista zwierząt')
+@section('h1_title', 'Lista zwierząt')
+
+@section('header')
+    <a href="{{ route('pets.create') }}" class="button button-primary">Dodaj zwierzę</a>
+@endsection
 
 @section('content')
 
-<h2>Lista petów</h2>
+    <div id="message">
+        @if (session('success'))
+            <p style="color:green">{{ session('success') }}</p>
+        @endif
 
-<div id="message">
-    @if(session('success'))
-        <p style="color:green">{{ session('success') }}</p>
-    @endif
+        @if ($errors->any())
+            <p style="color:red">{{ $errors->first() }}</p>
+        @endif
+    </div>
 
-    @if($errors->any())
-        <p style="color:red">{{ $errors->first() }}</p>
-    @endif
-</div>
+    <div id="filters">
+        <label for="status">Status:</label>
+        <select id="status">
+            @foreach ($statuses as $value => $label)
+                <option value="{{ $value }}">{{ $label }}</option>
+            @endforeach
+        </select>
+    </div>
 
-<a href="{{ route('pets.create') }}">Add pet</a>
-
-<label for="status">Status:</label>
-<select id="status">
-    @foreach ($statuses as $value => $label)
-        <option value="{{ $value }}">{{ $label }}</option>
-    @endforeach
-
-    <!-- <option value="xxx">xxx</option> -->
-</select>
-
-<table id="pets-table" border="1" cellpadding="5">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-
+    <div id="pets-table-container">
+        <table id="pets-table">
+            <thead>
+                <tr>
+                    <th class="column-id">ID</th>
+                    <th class="column-name">Nazwa</th>
+                    <th class="column-status">Status</th>
+                    <th class="column-actions">Akcje</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
 @endsection
