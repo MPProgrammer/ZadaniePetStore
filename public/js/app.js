@@ -4,11 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageBox = document.getElementById('message');
 
     function showSuccess(msg) {
-        messageBox.innerHTML = `<p style="color:green">${msg}</p>`;
+        messageBox.innerHTML = `<p class="notification is-success">${msg}</p>`;
     }
 
     function showError(msg) {
-        messageBox.innerHTML = `<p style="color:red">${msg}</p>`;
+        messageBox.innerHTML = `<p class="notification is-danger">${msg}</p>`;
     }
 
     function renderLoading() {
@@ -65,13 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
         pets.forEach(pet => {
             tableBody.innerHTML += `
                 <tr data-id="${pet.id}">
-                    <td>${pet.id}</td>
-                    <td>${pet.name ?? '-'}</td>
-                    <td>${pet.status}</td>
-                    <td>
-                        <a href="/pets/${pet.id}/edit">Edit</a>
+                    <td class="column-id">${pet.id}</td>
+                    <td class="column-name">${pet.name ?? '-'}</td>
+                    <td class="column-status">${pet.status}</td>
+                    <td class="column-actions">
+                        <a class="button button-warning" href="/pets/${pet.id}/edit">Edit</a>
                         |
-                        <button class="delete-btn" data-id="${pet.id}">
+                        <button class="button button-red delete-btn" data-id="${pet.id}">
                             Delete
                         </button>
                     </td>
