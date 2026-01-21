@@ -274,6 +274,7 @@ table {
     margin-top: var(--flex-gap);
     font-size: 14px;
     background-color: #ffffff;
+    table-layout: fixed;
 }
 
 thead th {
@@ -290,6 +291,10 @@ tbody td {
     border-bottom: 1px solid #e5e7eb;
     color: #111827;
     vertical-align: middle;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 tbody tr:nth-child(even) {
