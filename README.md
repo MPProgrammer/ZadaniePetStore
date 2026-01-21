@@ -1,66 +1,180 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Petstore – Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikacja demonstracyjna napisana w **Laravel**, komunikująca się z publicznym REST API **Swagger Petstore**.  
+Projekt prezentuje obsługę CRUD dla zasobu **Pet**, prosty interfejs użytkownika oraz świadome podejście do integracji z zewnętrznym API.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🎯 Zakres funkcjonalny
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Aplikacja umożliwia:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- wyświetlanie listy petów (filtrowanie po statusie)
+- dodawanie nowego peta
+- edycję istniejącego peta
+- usuwanie peta
+- obsługę błędów i komunikaty dla użytkownika
 
-## Learning Laravel
+### Obsługiwane pola:
+- `id` *(tylko do odczytu, widoczne na liście)*
+- `name`
+- `status`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Identyfikator `id` **nie jest edytowalny** — jest wyświetlany wyłącznie na liście petów.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🧱 Architektura
 
-## Laravel Sponsors
+### Backend
+- **Laravel (MVC)**
+- Warstwa serwisowa (`PetstoreService`) jako adapter do zewnętrznego API
+- Kontroler obsługuje:
+  - renderowanie widoków (SSR)
+  - endpointy AJAX (JSON)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Frontend
+- Blade templates
+- Vanilla JavaScript (Fetch API)
+- AJAX do:
+  - pobierania listy petów
+  - usuwania rekordów bez przeładowania strony
+- Klasyczny SSR flow dla:
+  - dodawania
+  - edycji
+  - redirectów i komunikatów
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## 🔌 Integracja z API Petstore
 
-## Contributing
+Źródło API:
+```
+https://petstore.swagger.io/v2
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Autoryzacja:
+```
+Header: api_key: special-key
+```
 
-## Code of Conduct
+### Obsługiwane endpointy:
+- `GET /pet/findByStatus`
+- `GET /pet/{petId}`
+- `POST /pet`
+- `PUT /pet`
+- `DELETE /pet/{petId}`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## ⚡ Cache
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Lista petów jest cache’owana:
+- **per status** (`available`, `pending`, `sold`)
+- przy użyciu **Laravel Cache (file driver)**
 
-## License
+Czas cache jest **konfigurowalny** w pliku:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```php
+config/pets.php
+```
+
+```php
+'cache_duration_minutes' => 1,
+```
+
+Pozwala to łatwo dostosować czas cache bez modyfikowania kodu aplikacji.
+
+### Cele cache:
+- ograniczenie liczby zapytań do zewnętrznego API
+- poprawa wydajności
+- odporność na chwilowe błędy API demo
+
+Cache jest **czyszczony** po:
+- dodaniu
+- edycji
+- usunięciu peta
+
+---
+
+## 🔐 Bezpieczeństwo
+
+- Ochrona CSRF dla wszystkich żądań POST
+- Token CSRF przekazywany w nagłówku przy requestach AJAX
+- Walidacja danych wejściowych po stronie backendu
+- API key przechowywany wyłącznie po stronie serwera (`.env`)
+
+---
+
+## ⚠️ Znane ograniczenia i decyzje projektowe (Edge-cases)
+
+### 1️⃣ Identyfikatory jako string
+
+API Petstore używa `int64` dla pola `id`.
+
+Ze względu na ograniczenia precyzji liczb w JavaScript (`Number.MAX_SAFE_INTEGER`), identyfikatory są:
+- traktowane jako **string**
+- przesyłane do frontendu jako string
+- nigdy nie rzutowane na `int`
+
+Zapobiega to utracie precyzji i błędom przy operacjach CRUD.
+
+---
+
+### 2️⃣ Brak paginacji w API
+
+Endpoint `findByStatus` nie udostępnia paginacji ani limitów.
+
+Zastosowane rozwiązania:
+- dane pobierane asynchronicznie (AJAX)
+- ograniczenie liczby wyświetlanych rekordów po stronie frontendu
+- cache po stronie backendu
+
+Frontend został zaprojektowany w sposób umożliwiający **łatwą rozbudowę tabeli**  
+(np. o sortowanie, filtrowanie, paginację przy użyciu bibliotek takich jak **DataTables**).
+
+---
+
+### 3️⃣ Kategorie, tagi i upload obrazów
+
+API udostępnia modele (`Category`, `Tag`, `uploadImage`), jednak:
+- brak endpointów do ich pobierania
+- upload obrazu nie zwraca użytecznych danych
+- brak możliwości realnego wykorzystania w UI
+
+Z tego powodu:
+- kategorie, tagi i obrazy **zostały świadomie pominięte**
+- aplikacja skupia się na podstawowym CRUD zasobu `Pet`
+
+---
+
+### 4️⃣ Charakter API
+
+Swagger Petstore jest API demonstracyjnym:
+- niespójne metody (POST zamiast PUT w update)
+- brak pełnych relacji
+- brak webhooków i paginacji
+
+Projekt pokazuje **adaptację do zewnętrznego API**, a nie jego idealne wykorzystanie domenowe.
+
+---
+
+## 🧪 Jakość kodu
+
+Projekt został sprawdzony przy użyciu narzędzi:
+
+- **PHPStan** – statyczna analiza kodu
+- **PHP CS Fixer** – automatyczne formatowanie kodu
+
+Style CSS zawierają **prefixy** zapewniające lepszą kompatybilność przeglądarek.
+
+---
+
+## 📌 Podsumowanie
+
+Projekt demonstruje:
+- czystą architekturę MVC
+- bezpieczną integrację z zewnętrznym API
+- obsługę edge-case’ów
+- świadome decyzje techniczne
+- gotowość do dalszej rozbudowy (DB, cron, paginacja, zaawansowane tabele)
