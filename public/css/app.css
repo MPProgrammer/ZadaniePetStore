@@ -95,17 +95,24 @@ h6 {
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     background-color: var(--header-bg-color);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 100;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     color: var(--header-color);
     height: var(--header-height);
     padding: 0 var(--flex-gap);
@@ -126,7 +133,15 @@ header h1 {
     border-radius: 4px;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s ease, opacity 0.2s ease;
+    -webkit-transition:
+        background-color 0.2s ease,
+        opacity 0.2s ease;
+    -o-transition:
+        background-color 0.2s ease,
+        opacity 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        opacity 0.2s ease;
 }
 
 .button:disabled {
@@ -178,11 +193,11 @@ main {
     padding: calc(var(--header-height) + var(--flex-gap)) var(--flex-gap) var(--flex-gap) var(--flex-gap);
 }
 
-p{
+p {
     margin: 0;
 }
 
-footer{
+footer {
     background-color: var(--footer-bg-color);
     color: var(--footer-color);
     text-align: center;
@@ -200,16 +215,36 @@ select {
     border-radius: 4px;
     background-color: #ffffff;
     color: #111827;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    -webkit-transition:
+        border-color 0.15s ease,
+        -webkit-box-shadow 0.15s ease;
+    transition:
+        border-color 0.15s ease,
+        -webkit-box-shadow 0.15s ease;
+    -o-transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        -webkit-box-shadow 0.15s ease;
 }
 
-.form-row{
+.form-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
     gap: 8px;
 }
 
-.form-row + .form-row{
+.form-row + .form-row {
     margin-top: var(--flex-gap);
 }
 
@@ -244,7 +279,7 @@ table {
 thead th {
     text-align: left;
     padding: 10px 12px;
-    background-color: #f1f5f9; /* light gray */
+    background-color: #f1f5f9;
     color: #1f2937;
     font-weight: 600;
     border-bottom: 2px solid #cbd5e1;
@@ -282,8 +317,14 @@ table .column-status {
 }
 
 td.column-actions {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     gap: 8px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
 }
