@@ -1,23 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Edytuj zwierzę - #' . $pet['id'] . ' ' . $pet['name'])
-@section('h1_title', 'Edytuj zwierzę - #' . $pet['id'] . ' ' . $pet['name'])
+@section('title', 'Edit pet - #' . $pet['id'] . ' ' . $pet['name'])
+@section('h1_title', 'Edit pet - #' . $pet['id'] . ' ' . $pet['name'])
 
 @section('header')
-    <a href="{{ route('pets.index') }}" class="button button-secondary">Wstecz</a>
-    <button type="submit" class="button button-red" form="delete-pet-form">Usuń</button>
-    <button type="submit" class="button button-primary" form="pet-form">Aktualizuj</button>
+    <a href="{{ route('pets.index') }}" class="button button-secondary">Back</a>
+    <button type="submit" class="button button-red" form="delete-pet-form">Delete</button>
+    <button type="submit" class="button button-primary" form="pet-form">Save</button>
 @endsection
 
 @section('content')
 
     <div id="message">
         @if (session('success'))
-            <p style="color:green">{{ session('success') }}</p>
+            <p class="notification is-success">{{ session('success') }}</p>
         @endif
 
         @if ($errors->any())
-            <p style="color:red">{{ $errors->first() }}</p>
+            <p class="notification is-danger">{{ $errors->first() }}</p>
         @endif
     </div>
 

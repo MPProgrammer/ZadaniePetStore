@@ -1,21 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Lista zwierząt')
-@section('h1_title', 'Lista zwierząt')
+@section('title', 'Pet list')
+@section('h1_title', 'Pet list')
 
 @section('header')
-    <a href="{{ route('pets.create') }}" class="button button-primary">Dodaj zwierzę</a>
+    <a href="{{ route('pets.create') }}" class="button button-primary">Add</a>
 @endsection
 
 @section('content')
 
     <div id="message">
         @if (session('success'))
-            <p style="color:green">{{ session('success') }}</p>
+            <p class="notification is-success">{{ session('success') }}</p>
         @endif
 
         @if ($errors->any())
-            <p style="color:red">{{ $errors->first() }}</p>
+            <p class="notification is-danger">{{ $errors->first() }}</p>
         @endif
     </div>
 
@@ -33,9 +33,9 @@
             <thead>
                 <tr>
                     <th class="column-id">ID</th>
-                    <th class="column-name">Nazwa</th>
+                    <th class="column-name">Name</th>
                     <th class="column-status">Status</th>
-                    <th class="column-actions">Akcje</th>
+                    <th class="column-actions">Actions</th>
                 </tr>
             </thead>
             <tbody></tbody>
