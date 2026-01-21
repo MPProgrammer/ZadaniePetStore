@@ -12,7 +12,7 @@ Projekt jest dostępny na [petstore.codelarix.dev](https://petstore.codelarix.de
 Aplikacja umożliwia:
 
 - wyświetlanie listy petów (filtrowanie po statusie)
-- dodawanie nowego peta
+- dodawanie nowego peta *(z ograniczeniami wynikającymi z API demo)*
 - edycję istniejącego peta
 - usuwanie peta
 - obsługę błędów i komunikaty dla użytkownika
@@ -110,28 +110,6 @@ Cache jest **czyszczony** po:
 
 ## ⚠️ Znane ograniczenia i decyzje projektowe (Edge-cases)
 
-### 5️⃣ Ograniczenia API Petstore (tworzenie nowych rekordów)
-
-Podczas testów zaobserwowano nieprawidłowe zachowanie demonstracyjnego API Swagger Petstore przy dodawaniu nowych petów:
-
-- API pozwala utworzyć nowego peta
-- nowemu rekordowi przypisywany jest identyfikator `9223372036854775807`
-- nowo dodany pet **nie pojawia się na liście petów**
-- po odświeżeniu strony edycji (`/pets/{id}/edit`) API zwraca domyślne dane peta (`doggie`)
-
-Zachowanie to wynika z charakteru API demonstracyjnego i nie jest związane z implementacją aplikacji.
-
-W obecnej wersji aplikacji:
-- możliwa jest **edycja oraz usuwanie istniejących petów**
-- dodawanie nowych petów jest obsłużone po stronie aplikacji, jednak dane nie są spójnie zwracane przez API
-
-W środowisku produkcyjnym problem ten zostałby rozwiązany poprzez:
-- własne API backendowe
-- synchronizację danych w bazie danych
-- lub walidację odpowiedzi API po operacji zapisu
-
----
-
 ### 1️⃣ Identyfikatory jako string
 
 API Petstore używa `int64` dla pola `id`.
@@ -180,6 +158,28 @@ Swagger Petstore jest API demonstracyjnym:
 - brak webhooków i paginacji
 
 Projekt pokazuje **adaptację do zewnętrznego API**, a nie jego idealne wykorzystanie domenowe.
+
+---
+
+### 5️⃣ Ograniczenia API Petstore (tworzenie nowych rekordów)
+
+Podczas testów zaobserwowano nieprawidłowe zachowanie demonstracyjnego API Swagger Petstore przy dodawaniu nowych petów:
+
+- API pozwala utworzyć nowego peta
+- nowemu rekordowi przypisywany jest identyfikator `9223372036854775807`
+- nowo dodany pet **nie pojawia się na liście petów**
+- po odświeżeniu strony edycji (`/pets/{id}/edit`) API zwraca domyślne dane peta (`doggie`)
+
+Zachowanie to wynika z charakteru API demonstracyjnego i nie jest związane z implementacją aplikacji.
+
+W obecnej wersji aplikacji:
+- możliwa jest **edycja oraz usuwanie istniejących petów**
+- dodawanie nowych petów jest obsłużone po stronie aplikacji, jednak dane nie są spójnie zwracane przez API
+
+W środowisku produkcyjnym problem ten zostałby rozwiązany poprzez:
+- własne API backendowe
+- synchronizację danych w bazie danych
+- lub walidację odpowiedzi API po operacji zapisu
 
 ---
 
