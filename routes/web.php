@@ -10,7 +10,6 @@ Route::get('/', [PetController::class, 'index'])->name('pets.index');
 
 // Create page
 Route::get('/pets/create', [PetController::class, 'create'])->name('pets.create');
-// @todo Add docblock for create method
 
 // Store a new pet
 Route::post('/pets', [PetController::class, 'store'])->name('pets.store');
@@ -25,7 +24,7 @@ Route::post('/pets/{id}', [PetController::class, 'update'])->name('pets.update')
 Route::post('/pets/{id}/delete', [PetController::class, 'destroy'])->name('pets.destroy');
 
 // Delete a pet (ajax)
-Route::post('/ajax/pets/{id}/delete', [PetController::class, 'destroyAjax'])->name('pets.destroy.ajax');
+Route::post('/ajax/pets/{id}/delete', [PetController::class, 'ajaxDestroy']);
 
 // Get all pets (ajax)
 Route::get('/ajax/pets', [PetController::class, 'ajaxList']);
