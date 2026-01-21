@@ -3,6 +3,8 @@
 Aplikacja demonstracyjna napisana w **Laravel**, komunikująca się z publicznym REST API **Swagger Petstore**.  
 Projekt prezentuje obsługę CRUD dla zasobu **Pet**, prosty interfejs użytkownika oraz świadome podejście do integracji z zewnętrznym API.
 
+Projekt jest dostępny na [petstore.codelarix.dev](https://petstore.codelarix.dev/).
+
 ---
 
 ## 🎯 Zakres funkcjonalny
@@ -20,7 +22,7 @@ Aplikacja umożliwia:
 - `name`
 - `status`
 
-Identyfikator `id` **nie jest edytowalny** — jest wyświetlany wyłącznie na liście petów.
+Identyfikator `id` **nie jest edytowalny** - jest wyświetlany wyłącznie na liście petów.
 
 ---
 
