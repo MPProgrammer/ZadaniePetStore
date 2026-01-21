@@ -43,3 +43,7 @@
     </div>
 
 @endsection
+
+@section('scripts')
+    <script src="{{ asset('js/pets/index.js') }}" defer></script>
+@endsection
